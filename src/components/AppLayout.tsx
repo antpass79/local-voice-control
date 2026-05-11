@@ -14,7 +14,7 @@ interface Props {
 
 export function AppLayout({ children }: Props) {
   const theme = useTheme();
-  const ollamaAvailable = useImageStore((s) => s.ollamaAvailable);
+  const llmAvailable = useImageStore((s) => s.llmAvailable);
   const asrStatus = useImageStore((s) => s.asrStatus);
 
   const asrColor: 'default' | 'success' | 'warning' | 'error' = (() => {
@@ -49,12 +49,12 @@ export function AppLayout({ children }: Props) {
             />
           </Tooltip>
 
-          <Tooltip title={ollamaAvailable ? `${LLM_PROVIDER} reachable · ${LLM_MODEL}` : `${LLM_PROVIDER} not reachable – using fallback parser · ${LLM_MODEL}`}>
+          <Tooltip title={llmAvailable ? `${LLM_PROVIDER} reachable · ${LLM_MODEL}` : `${LLM_PROVIDER} not reachable – using fallback parser · ${LLM_MODEL}`}>
             <Chip
               icon={<SmartToyIcon />}
-              label={ollamaAvailable ? `${LLM_PROVIDER}: online · ${LLM_MODEL}` : `${LLM_PROVIDER}: offline`}
+              label={llmAvailable ? `${LLM_PROVIDER}: online · ${LLM_MODEL}` : `${LLM_PROVIDER}: offline`}
               size="small"
-              color={ollamaAvailable ? 'success' : 'warning'}
+              color={llmAvailable ? 'success' : 'warning'}
               variant="outlined"
             />
           </Tooltip>

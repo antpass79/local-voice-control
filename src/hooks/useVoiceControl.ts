@@ -2,7 +2,7 @@ import { useRef, useCallback, useEffect } from 'react';
 import { useImageStore } from '../store/imageStore';
 import { SherpaService } from '../services/asr/sherpaService';
 import { AudioCapture } from '../services/asr/audioCapture';
-import { parseCommand, checkOllamaHealth } from '../services/llm/llmService';
+import { parseCommand, checkLlmHealth } from '../services/llm/llmService';
 import type { SherpaModelConfig } from '../types';
 
 /**
@@ -17,16 +17,16 @@ export function useVoiceControl() {
     setLoadingProgress,
     setCurrentTranscript,
     setListening,
-    setOllamaAvailable,
+    setLlmAvailable,
     setError,
     applyCommand,
     addLogEntry,
   } = useImageStore();
 
-  // ── Health-check Ollama on mount ────────────────────────────────────────────
+  // ── Health-check LLM provider on mount ────────────────────────────────────
   useEffect(() => {
-    checkOllamaHealth().then(setOllamaAvailable);
-  }, [setOllamaAvailable]);
+    checkLlmHealth().then(setLlmAvailable);
+  }, [setLlmAvailable]);
 
   // ── Initialize Sherpa-ONNX ASR ──────────────────────────────────────────────
   const initializeSherpa = useCallback(

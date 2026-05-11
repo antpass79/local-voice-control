@@ -26,7 +26,7 @@ interface ImageStoreState {
   loadingProgress: number;       // 0-100 during ASR model loading
   currentTranscript: string;
   isListening: boolean;
-  ollamaAvailable: boolean;
+  llmAvailable: boolean;
   error: string | null;
 }
 
@@ -42,7 +42,7 @@ interface ImageStoreActions {
   setLoadingProgress: (progress: number) => void;
   setCurrentTranscript: (text: string) => void;
   setListening: (listening: boolean) => void;
-  setOllamaAvailable: (available: boolean) => void;
+  setLlmAvailable: (available: boolean) => void;
   setError: (error: string | null) => void;
 }
 
@@ -58,7 +58,7 @@ export const useImageStore = create<ImageStore>()(
       loadingProgress: 0,
       currentTranscript: '',
       isListening: false,
-      ollamaAvailable: false,
+      llmAvailable: false,
       error: null,
 
       // ── Actions ──────────────────────────────────────────────────
@@ -114,7 +114,7 @@ export const useImageStore = create<ImageStore>()(
       setLoadingProgress: (progress) => set({ loadingProgress: progress }),
       setCurrentTranscript: (text) => set({ currentTranscript: text }),
       setListening: (listening) => set({ isListening: listening }),
-      setOllamaAvailable: (available) => set({ ollamaAvailable: available }),
+      setLlmAvailable: (available) => set({ llmAvailable: available }),
       setError: (error) => set({ error }),
     }),
     { name: 'image-store' }

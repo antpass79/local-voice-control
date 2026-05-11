@@ -58,7 +58,7 @@ function isValidCommand(obj: unknown): obj is VoiceCommand {
 // ─── Fallback regex parser ────────────────────────────────────────────────────
 
 /**
- * Used when Ollama is unavailable or returns an unparseable response.
+ * Used when the LLM provider is unavailable or returns an unparseable response.
  * Handles common English voice patterns for gain / width / zoom.
  * The regex uses \b word boundaries and optional filler words ("the", "a", "by")
  * to match natural speech from the ASR engine.
@@ -142,7 +142,7 @@ async function parseWithOllama(transcript: string): Promise<VoiceCommand | null>
     signal: AbortSignal.timeout(10_000),
   });
 
-  if (!response.ok) throw new Error(`Ollama HTTP ${response.status}`);
+  if (!response.ok) throw new Error(`Ollama HTTP ${response.status}`); // Ollama-specific error
 
   const data = (await response.json()) as { response: string };
   const jsonText = extractJson(data.response);
@@ -178,13 +178,13 @@ async function parseWithFoundry(transcript: string): Promise<VoiceCommand | null
 }
 
 /** Returns true if the configured LLM provider is reachable and ready. */
-export async function checkOllamaHealth(): Promise<boolean> {
+export async function checkLlmHealth(): Promise<boolean> {
   return PROVIDER === 'foundry'
     ? checkFoundryHealth()
-    : checkOllamaHealthInternal();
+    : checkOllamaHealth();
 }
 
-async function checkOllamaHealthInternal(): Promise<boolean> {
+async function checkOllamaHealth(): Promise<boolean> {
   try {
     const response = await fetch(`${OLLAMA_URL}/api/tags`, {
       signal: AbortSignal.timeout(3_000),
