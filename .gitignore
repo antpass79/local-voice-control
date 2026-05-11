@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+*.local
+
+# Sherpa-ONNX WASM and model files (downloaded separately)
+public/sherpa-onnx/*.js
+public/sherpa-onnx/*.wasm
+public/models/*.onnx
+public/models/*.txt
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,55 @@
+[     326ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5175/node_modules/.vite/deps/chunk-GKJBSOWT.js?v=c04dc6d5:21550
+[     695ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5175/favicon.ico:0
+[   26746ms] [LOG] /home/runner/work/sherpa-onnx/sherpa-onnx/sherpa-onnx/c-api/c-api.cc:SherpaOnnxCreateOnlineRecognizer:150 OnlineRecognizerConfig(feat_config=FeatureExtractorConfig(sampling_rate=16000, feature_dim=80, low_freq=20, high_freq=-400, dither=0), model_config=OnlineModelConfig(transducer=OnlineTransducerModelConfig(encoder="./encoder.onnx", decoder="./decoder.onnx", joiner="./joiner.onnx"), paraformer=OnlineParaformerModelConfig(encoder="", decoder=""), wenet_ctc=OnlineWenetCtcModelConfig(model="", chunk_size=16, num_left_chunks=4), zipformer2_ctc=OnlineZipformer2CtcModelConfig(model=""), nemo_ctc=OnlineNeMoCtcModelConfig(model=""), provider_config=ProviderConfig(device=0, provider="cpu", cuda_config=CudaConfig(cudnn_conv_algo_search=1), trt_config=TensorrtConfig(trt_max_workspace_size=2147483647, trt_max_partition_iterations=10, trt_min_subgraph_size=5, trt_fp16_enable="True", trt_detailed_build_log="False", trt_engine_cache_enable="True", trt_engine_cache_path=".", trt_timing_cache_enable="True", trt_timing_cache_path=".",trt_dump_subgraphs="False" )), tokens="./tokens.txt", num_threads=1, warm_up=0, debug=True, model_type="", modeling_unit="cjkchar", bpe_vocab=""), lm_config=OnlineLMConfig(model="", scale=0.5, shallow_fusion=True), endpoint_config=EndpointConfig(rule1=EndpointRule(must_contain_nonsilence=False, min_trailing_silence=2.4, min_utterance_length=0), rule2=EndpointRule(must_contain_nonsilence=True, min_trailing_silence=1.2, min_utterance_length=0), rule3=EndpointRule(must_contain_nonsilence=False, min_trailing_silence=0, min_utterance_length=20)), ctc_fst_decoder_config=OnlineCtcFstDecoderConfig(graph="", max_active=3000), enable_endpoint=True, max_active_paths=4, hotwords_score=1.5, hotwords_file="", decoding_method="greedy_search", blank_penalty=0, temperature_scale=2, rule_fsts="", rule_fars="") @ :0
+[   26747ms] [LOG]  @ :0
+[   28745ms] [LOG] /home/runner/work/sherpa-onnx/sherpa-onnx/sherpa-onnx/csrc/online-transducer-model.cc:GetModelType:52 cnn_module_kernels=31,31,31,31,31 @ :0
+[   28745ms] [LOG] attention_dims=192,192,192,192,192 @ :0
+[   28745ms] [LOG] num_encoder_layers=2,4,3,2,4 @ :0
+[   28745ms] [LOG] T=39 @ :0
+[   28745ms] [LOG] decode_chunk_len=32 @ :0
+[   28745ms] [LOG] model_author=k2-fsa @ :0
+[   28745ms] [LOG] encoder_dims=384,384,384,384,384 @ :0
+[   28746ms] [LOG] version=1 @ :0
+[   28746ms] [LOG] left_context_len=64,32,16,8,32 @ :0
+[   28746ms] [LOG] onnx.infer=onnxruntime.quant @ :0
+[   28746ms] [LOG] model_type=zipformer @ :0
+[   28746ms] [LOG]  @ :0
+[   29648ms] [LOG] /home/runner/work/sherpa-onnx/sherpa-onnx/sherpa-onnx/csrc/online-zipformer-transducer-model.cc:InitEncoder:94 ---encoder--- @ :0
+[   29648ms] [LOG] cnn_module_kernels=31,31,31,31,31 @ :0
+[   29648ms] [LOG] attention_dims=192,192,192,192,192 @ :0
+[   29648ms] [LOG] num_encoder_layers=2,4,3,2,4 @ :0
+[   29648ms] [LOG] T=39 @ :0
+[   29648ms] [LOG] decode_chunk_len=32 @ :0
+[   29648ms] [LOG] model_author=k2-fsa @ :0
+[   29648ms] [LOG] encoder_dims=384,384,384,384,384 @ :0
+[   29648ms] [LOG] version=1 @ :0
+[   29648ms] [LOG] left_context_len=64,32,16,8,32 @ :0
+[   29648ms] [LOG] onnx.infer=onnxruntime.quant @ :0
+[   29648ms] [LOG] model_type=zipformer @ :0
+[   29648ms] [LOG]  @ :0
+[   29648ms] [LOG] /home/runner/work/sherpa-onnx/sherpa-onnx/sherpa-onnx/csrc/online-zipformer-transducer-model.cc:operator():114 encoder_dims: 384 384 384 384 384  @ :0
+[   29648ms] [LOG]  @ :0
+[   29648ms] [LOG] /home/runner/work/sherpa-onnx/sherpa-onnx/sherpa-onnx/csrc/online-zipformer-transducer-model.cc:operator():114 attention_dims: 192 192 192 192 192  @ :0
+[   29648ms] [LOG]  @ :0
+[   29649ms] [LOG] /home/runner/work/sherpa-onnx/sherpa-onnx/sherpa-onnx/csrc/online-zipformer-transducer-model.cc:operator():114 num_encoder_layers: 2 4 3 2 4  @ :0
+[   29649ms] [LOG]  @ :0
+[   29649ms] [LOG] /home/runner/work/sherpa-onnx/sherpa-onnx/sherpa-onnx/csrc/online-zipformer-transducer-model.cc:operator():114 cnn_module_kernels: 31 31 31 31 31  @ :0
+[   29649ms] [LOG]  @ :0
+[   29649ms] [LOG] /home/runner/work/sherpa-onnx/sherpa-onnx/sherpa-onnx/csrc/online-zipformer-transducer-model.cc:operator():114 left_context_len: 64 32 16 8 32  @ :0
+[   29649ms] [LOG]  @ :0
+[   29649ms] [LOG] /home/runner/work/sherpa-onnx/sherpa-onnx/sherpa-onnx/csrc/online-zipformer-transducer-model.cc:InitEncoder:121 T: 39 @ :0
+[   29649ms] [LOG] /home/runner/work/sherpa-onnx/sherpa-onnx/sherpa-onnx/csrc/online-zipformer-transducer-model.cc:InitEncoder:122 decode_chunk_len_: 32 @ :0
+[   29659ms] [LOG] /home/runner/work/sherpa-onnx/sherpa-onnx/sherpa-onnx/csrc/online-zipformer-transducer-model.cc:InitDecoder:143 ---decoder--- @ :0
+[   29659ms] [LOG] context_size=2 @ :0
+[   29659ms] [LOG] vocab_size=500 @ :0
+[   29659ms] [LOG]  @ :0
+[   29664ms] [LOG] /home/runner/work/sherpa-onnx/sherpa-onnx/sherpa-onnx/csrc/online-zipformer-transducer-model.cc:InitJoiner:168 ---joiner--- @ :0
+[   29665ms] [LOG] joiner_dim=512 @ :0
+[   29665ms] [LOG]  @ :0
+[  671335ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5175/@vite/client:559
+[  671370ms] [ERROR] Failed to load resource: net::ERR_NETWORK_IO_SUSPENDED @ http://localhost:5175/:0
+[ 5768435ms] [ERROR] Failed to load resource: net::ERR_NETWORK_IO_SUSPENDED @ http://localhost:5175/:0
+[80237767ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5175/node_modules/.vite/deps/chunk-GKJBSOWT.js?v=c04dc6d5:21550
+[82794313ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5175/@vite/client:559
+[82794345ms] [ERROR] Failed to load resource: net::ERR_NETWORK_IO_SUSPENDED @ http://localhost:5175/:0
+[318540864ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5175/node_modules/.vite/deps/chunk-GKJBSOWT.js?v=c04dc6d5:21550

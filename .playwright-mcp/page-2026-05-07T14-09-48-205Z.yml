@@ -1,0 +1,84 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - heading "Local Voice Control" [level=6] [ref=e160]
+      - 'generic "ASR: loading" [ref=e161]':
+        - img [ref=e8]
+        - generic [ref=e10]: "ASR: loading"
+      - generic "Ollama LLM reachable" [ref=e162]:
+        - img [ref=e12]
+        - generic [ref=e14]: "LLM: online"
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - heading "Image Parameters" [level=6] [ref=e163]
+          - button "Reset to defaults" [ref=e164] [cursor=pointer]:
+            - img [ref=e22]
+        - separator [ref=e24]
+        - generic [ref=e25]:
+          - generic [ref=e26]:
+            - generic [ref=e27]:
+              - generic [ref=e28]:
+                - paragraph [ref=e29]: ☀
+                - heading "Gain" [level=6] [ref=e165]
+              - heading "50" [level=6] [ref=e166]
+            - generic [ref=e32] [cursor=pointer]:
+              - generic [ref=e36]: "0"
+              - generic [ref=e38]: "100"
+              - slider [ref=e40]: "50"
+          - generic [ref=e41]:
+            - generic [ref=e42]:
+              - generic [ref=e43]:
+                - paragraph [ref=e44]: ↔
+                - heading "Width" [level=6] [ref=e167]
+              - heading "100%" [level=6] [ref=e168]
+            - generic [ref=e47] [cursor=pointer]:
+              - generic [ref=e51]: "10"
+              - generic [ref=e53]: 100%
+              - slider [ref=e55]: "100"
+          - generic [ref=e56]:
+            - generic [ref=e57]:
+              - generic [ref=e58]:
+                - paragraph [ref=e59]: 🔍
+                - heading "Zoom" [level=6] [ref=e169]
+              - heading "1.0x" [level=6] [ref=e170]
+            - generic [ref=e62] [cursor=pointer]:
+              - generic [ref=e66]: "0.5"
+              - generic [ref=e68]: 5x
+              - slider [ref=e70]: "1"
+      - heading "Image Preview" [level=6] [ref=e171]
+      - generic [ref=e76]:
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - heading "Voice Control" [level=6] [ref=e172]
+            - button "Configure ASR model" [active] [ref=e173] [cursor=pointer]:
+              - img [ref=e82]
+          - separator [ref=e84]
+          - generic [ref=e87]: Loading model…
+          - progressbar [ref=e174]
+          - generic "Initialize ASR first" [ref=e177]:
+            - button [disabled]:
+              - img
+          - generic [ref=e91]: Press the button to start
+          - separator [ref=e92]
+          - heading "Live Transcript" [level=6] [ref=e178]
+          - generic [ref=e95]:
+            - textbox "Transcription will appear here…" [ref=e179]
+            - group
+          - separator [ref=e97]
+          - heading "Example Commands" [level=6] [ref=e180]
+          - generic [ref=e99]:
+            - generic [ref=e100]: "\"set gain to 80\""
+            - generic [ref=e101]: "\"zoom in\" / \"zoom out\""
+            - generic [ref=e102]: "\"increase width by 10\""
+            - generic [ref=e103]: "\"maximum gain\""
+            - generic [ref=e104]: "\"reset zoom\""
+        - generic [ref=e106]:
+          - generic [ref=e107]:
+            - heading "Command Log" [level=6] [ref=e181]
+            - generic "Clear log" [ref=e182]:
+              - button [disabled]:
+                - img
+          - separator [ref=e110]
+          - paragraph [ref=e112]: No commands yet

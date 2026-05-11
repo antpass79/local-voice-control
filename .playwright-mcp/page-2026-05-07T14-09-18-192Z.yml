@@ -1,0 +1,85 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - heading "Local Voice Control" [level=6] [ref=e6]
+      - 'generic "ASR: idle" [ref=e7]':
+        - img [ref=e8]
+        - generic [ref=e10]: "ASR: idle"
+      - generic "Ollama not reachable – using fallback parser" [ref=e11]:
+        - img [ref=e12]
+        - generic [ref=e14]: "LLM: offline"
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - heading "Image Parameters" [level=6] [ref=e20]
+          - button "Reset to defaults" [ref=e21] [cursor=pointer]:
+            - img [ref=e22]
+        - separator [ref=e24]
+        - generic [ref=e25]:
+          - generic [ref=e26]:
+            - generic [ref=e27]:
+              - generic [ref=e28]:
+                - paragraph [ref=e29]: ☀
+                - heading "Gain" [level=6] [ref=e30]
+              - heading "50" [level=6] [ref=e31]
+            - generic [ref=e32] [cursor=pointer]:
+              - generic [ref=e36]: "0"
+              - generic [ref=e38]: "100"
+              - slider [ref=e40]: "50"
+          - generic [ref=e41]:
+            - generic [ref=e42]:
+              - generic [ref=e43]:
+                - paragraph [ref=e44]: ↔
+                - heading "Width" [level=6] [ref=e45]
+              - heading "100%" [level=6] [ref=e46]
+            - generic [ref=e47] [cursor=pointer]:
+              - generic [ref=e51]: "10"
+              - generic [ref=e53]: 100%
+              - slider [ref=e55]: "100"
+          - generic [ref=e56]:
+            - generic [ref=e57]:
+              - generic [ref=e58]:
+                - paragraph [ref=e59]: 🔍
+                - heading "Zoom" [level=6] [ref=e60]
+              - heading "1.0x" [level=6] [ref=e61]
+            - generic [ref=e62] [cursor=pointer]:
+              - generic [ref=e66]: "0.5"
+              - generic [ref=e68]: 5x
+              - slider [ref=e70]: "1"
+      - heading "Image Preview" [level=6] [ref=e73]
+      - generic [ref=e76]:
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - heading "Voice Control" [level=6] [ref=e80]
+            - button "Configure ASR model" [ref=e81] [cursor=pointer]:
+              - img [ref=e82]
+          - separator [ref=e84]
+          - generic [ref=e85]:
+            - generic [ref=e87]: Not initialized
+            - generic [ref=e88]: Click ⚙ to initialize Sherpa-ONNX
+          - generic "Initialize ASR first" [ref=e90]:
+            - button [disabled]:
+              - img
+          - generic [ref=e91]: Press the button to start
+          - separator [ref=e92]
+          - heading "Live Transcript" [level=6] [ref=e93]
+          - generic [ref=e95]:
+            - textbox "Transcription will appear here…" [ref=e96]
+            - group
+          - separator [ref=e97]
+          - heading "Example Commands" [level=6] [ref=e98]
+          - generic [ref=e99]:
+            - generic [ref=e100]: "\"set gain to 80\""
+            - generic [ref=e101]: "\"zoom in\" / \"zoom out\""
+            - generic [ref=e102]: "\"increase width by 10\""
+            - generic [ref=e103]: "\"maximum gain\""
+            - generic [ref=e104]: "\"reset zoom\""
+        - generic [ref=e106]:
+          - generic [ref=e107]:
+            - heading "Command Log" [level=6] [ref=e108]
+            - generic "Clear log" [ref=e109]:
+              - button [disabled]:
+                - img
+          - separator [ref=e110]
+          - paragraph [ref=e112]: No commands yet
