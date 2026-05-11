@@ -3,6 +3,11 @@ import MicIcon from '@mui/icons-material/Mic';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import { useImageStore } from '../store/imageStore';
 
+const LLM_PROVIDER = ((import.meta.env.VITE_LLM_PROVIDER as string | undefined) ?? 'ollama').toLowerCase();
+const LLM_MODEL = LLM_PROVIDER === 'foundry'
+  ? ((import.meta.env.VITE_FOUNDRY_MODEL as string | undefined) ?? 'unknown')
+  : ((import.meta.env.VITE_OLLAMA_MODEL as string | undefined) ?? 'unknown');
+
 interface Props {
   children: React.ReactNode;
 }
@@ -44,10 +49,10 @@ export function AppLayout({ children }: Props) {
             />
           </Tooltip>
 
-          <Tooltip title={ollamaAvailable ? 'Ollama LLM reachable' : 'Ollama not reachable – using fallback parser'}>
+          <Tooltip title={ollamaAvailable ? `${LLM_PROVIDER} reachable · ${LLM_MODEL}` : `${LLM_PROVIDER} not reachable – using fallback parser · ${LLM_MODEL}`}>
             <Chip
               icon={<SmartToyIcon />}
-              label={ollamaAvailable ? 'LLM: online' : 'LLM: offline'}
+              label={ollamaAvailable ? `${LLM_PROVIDER}: online · ${LLM_MODEL}` : `${LLM_PROVIDER}: offline`}
               size="small"
               color={ollamaAvailable ? 'success' : 'warning'}
               variant="outlined"

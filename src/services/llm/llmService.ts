@@ -207,7 +207,7 @@ async function checkFoundryHealth(): Promise<boolean> {
     });
     if (!response.ok) return false;
     const data = (await response.json()) as { data: { id: string }[] };
-    return data.data?.some((m) => m.id === FOUNDRY_MODEL) ?? false;
+    return data.data?.some((m) => m.id === FOUNDRY_MODEL || m.id.startsWith(FOUNDRY_MODEL)) ?? false;
   } catch {
     return false;
   }

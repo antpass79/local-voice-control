@@ -2,7 +2,7 @@ import { useRef, useCallback, useEffect } from 'react';
 import { useImageStore } from '../store/imageStore';
 import { SherpaService } from '../services/asr/sherpaService';
 import { AudioCapture } from '../services/asr/audioCapture';
-import { parseCommand, checkOllamaHealth } from '../services/llm/ollamaService';
+import { parseCommand, checkOllamaHealth } from '../services/llm/llmService';
 import type { SherpaModelConfig } from '../types';
 
 /**

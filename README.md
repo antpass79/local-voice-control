@@ -9,8 +9,8 @@ A React application for controlling image parameters (gain, width, zoom) using v
 | UI | React 18 + TypeScript + MUI v5 |
 | State | Zustand v5 |
 | Speech-to-Text | [Sherpa-ONNX](https://github.com/k2-fsa/sherpa-onnx) (WASM, runs in browser) |
-| Command parsing | [Ollama](https://ollama.com) + `qwen2.5:0.5b` (local LLM via Docker) |
-| Container runtime | Rancher Desktop (or any Docker-compatible runtime) |
+| Command parsing | [Ollama](https://ollama.com) **or** [Foundry Local](https://learn.microsoft.com/en-us/azure/foundry-local/) (configurable, local LLM) |
+| Container runtime | Rancher Desktop or any Docker-compatible runtime (Ollama only) |
 
 ---
 
@@ -22,39 +22,58 @@ A React application for controlling image parameters (gain, width, zoom) using v
 npm install
 ```
 
-### 2. Download Sherpa-ONNX WASM + model files
+### 2. Download Sherpa-ONNX WASM + English model
 
 ```powershell
 .\scripts\setup.ps1
 ```
 
-This will:
-- Download the Sherpa-ONNX streaming-ASR WASM files → `public/sherpa-onnx/`
-- Download the `sherpa-onnx-streaming-zipformer-en-2023-06-26` model → `public/models/`
-- Create a `.env` from `.env.example`
+This downloads the English zipformer streaming-ASR WASM bundle from the [k2-fsa GitHub releases](https://github.com/k2-fsa/sherpa-onnx/releases) into `public/sherpa-onnx/`. The model is bundled inside the `.data` file — no separate ONNX files are needed.
 
-#### Manual download (if the script fails)
+### 3. Configure the LLM provider
 
-1. Go to [Sherpa-ONNX Releases](https://github.com/k2-fsa/sherpa-onnx/releases)
-2. Download the **wasm-streaming-asr** tar for the latest version
-3. Extract and copy `sherpa-onnx-streaming-asr.js` and `sherpa-onnx-streaming-asr.wasm` to `public/sherpa-onnx/`
-4. Download an English streaming model from the [asr-models tag](https://github.com/k2-fsa/sherpa-onnx/releases/tag/asr-models)
-5. Copy `encoder-*.onnx`, `decoder-*.onnx`, `joiner-*.onnx`, `tokens.txt` to `public/models/`
+Copy `.env.example` to `.env` and choose a provider:
 
-### 3. Start Ollama (local LLM)
+#### Option A — Ollama (Docker)
 
 ```powershell
-npm run ollama:up      # docker compose up -d
-npm run ollama:pull    # pulls qwen2.5:0.5b (~400 MB)
+npm run ollama:up        # docker compose up -d
+npm run ollama:pull      # pulls qwen2.5:0.5b (~400 MB)
 ```
 
-Requires Rancher Desktop (or Docker) to be running.
+Recommended models (install with `ollama pull <model>`):
 
-### 4. Configure environment (optional)
+| Model | Size | Notes |
+|---|---|---|
+| `phi4-mini` | 2.5 GB | Best JSON accuracy for this task |
+| `qwen2.5:1.5b` | 1 GB | Fast, good JSON |
+| `gemma3:1b` | 815 MB | Lightweight |
 
-Copy `.env.example` to `.env` and adjust paths / model names if needed.
+Set in `.env`:
+```env
+VITE_LLM_PROVIDER=ollama
+VITE_OLLAMA_MODEL=phi4-mini
+```
 
-### 5. Run the app
+#### Option B — Foundry Local (Windows ML)
+
+Install [Foundry Local](https://learn.microsoft.com/en-us/azure/foundry-local/), then run:
+
+```bash
+foundry model run qwen2.5-1.5b
+```
+
+This starts the OpenAI-compatible REST server at `http://localhost:5764`.
+
+Set in `.env`:
+```env
+VITE_LLM_PROVIDER=foundry
+VITE_FOUNDRY_MODEL=qwen2.5-1.5b
+```
+
+> If the LLM is offline the app falls back to a built-in regex parser that handles the most common command patterns.
+
+### 4. Run the app
 
 ```powershell
 npm run dev
@@ -67,11 +86,11 @@ Open http://localhost:5173
 ## Usage
 
 1. Click **⚙** (settings icon) in the Voice Control panel
-2. Verify the file paths match your downloaded files, then click **Initialize**
+2. Click **Initialize** to load the ASR model
 3. Wait for the ASR status to change from *Loading…* to **Ready**
 4. Click the **microphone button** to start/stop recording
-5. Speak a command — the live transcript is shown while you speak
-6. After a natural pause, the final transcript is sent to Ollama for parsing
+5. Speak a command — the live transcript appears while you speak
+6. After a natural pause, the final transcript is sent to the LLM for parsing
 7. The matched command is applied and logged in the **Command Log**
 
 ### Supported voice commands (examples)
@@ -86,8 +105,6 @@ Open http://localhost:5173
 | "full width" | width → 100 |
 | "maximum gain" | gain → 100 |
 | "reset zoom" | zoom → 1.0 |
-
-> If Ollama is offline, a built-in regex parser handles the most common patterns.
 
 ---
 
@@ -107,8 +124,9 @@ Browser
   │                        ▼
   │                   Transcript (final)
   │                        │
-  └── OllamaService ──► POST /api/generate (localhost:11434)
-                           │  (qwen2.5:0.5b parses text → JSON)
+  └── LlmService ─┬─► Ollama  POST /api/generate        (localhost:11434)
+                  └─► Foundry POST /v1/chat/completions  (localhost:5764)
+                           │  (LLM parses text → JSON command)
                            ▼
                       VoiceCommand → Zustand applyCommand()
 ```
@@ -120,8 +138,8 @@ Browser
 ```
 local-voice-control/
 ├── public/
-│   ├── sherpa-onnx/          ← WASM files (gitignored, downloaded by setup.ps1)
-│   └── models/               ← ONNX model files (gitignored, downloaded by setup.ps1)
+│   ├── sherpa-onnx/          ← WASM + bundled English model (gitignored, downloaded by setup.ps1)
+│   └── models/               ← reserved for future separate model files
 ├── src/
 │   ├── components/
 │   │   ├── AppLayout.tsx
@@ -135,17 +153,29 @@ local-voice-control/
 │   ├── services/
 │   │   ├── asr/audioCapture.ts
 │   │   ├── asr/sherpaService.ts
-│   │   └── llm/ollamaService.ts
+│   │   └── llm/llmService.ts     ← supports Ollama + Foundry Local
 │   ├── store/imageStore.ts
 │   ├── types/index.ts
 │   ├── workers/sherpa.worker.ts
 │   ├── App.tsx
 │   ├── main.tsx
 │   └── theme.ts
-├── docker-compose.yml        ← Ollama service
-├── scripts/setup.ps1         ← Model/WASM downloader
+├── docker-compose.yml        ← Ollama service (optional)
+├── scripts/setup.ps1         ← WASM downloader
 └── .env.example
 ```
+
+---
+
+## Environment variables
+
+| Variable | Default | Description |
+|---|---|---|
+| `VITE_LLM_PROVIDER` | `ollama` | `ollama` or `foundry` |
+| `VITE_OLLAMA_URL` | `http://localhost:11434` | Ollama base URL |
+| `VITE_OLLAMA_MODEL` | `phi4-mini` | Ollama model tag |
+| `VITE_FOUNDRY_URL` | `http://localhost:5764` | Foundry Local REST URL |
+| `VITE_FOUNDRY_MODEL` | `phi-3.5-mini-instruct` | Foundry model alias |
 
 ---
 
@@ -153,8 +183,9 @@ local-voice-control/
 
 | Issue | Fix |
 |---|---|
-| ASR stays on "Loading…" | Check browser console for WASM fetch errors. Verify files in `public/sherpa-onnx/`. |
-| "Sherpa-ONNX initialization timed out" | Model files may be missing or paths wrong. Open the ⚙ dialog and verify URLs. |
+| ASR stays on "Loading…" | Check browser console. Verify files exist in `public/sherpa-onnx/` (run `setup.ps1`). |
+| "ASR initialization timed out" | Model files may be missing. Re-run `setup.ps1`. |
 | Microphone permission denied | Browser needs HTTPS or localhost. Allow microphone in browser settings. |
-| LLM: offline | Start Ollama with `npm run ollama:up` and pull a model with `npm run ollama:pull`. |
-| Commands not recognized | Try the fallback phrases listed in the examples table above. |
+| LLM: offline (Ollama) | Run `npm run ollama:up` and `npm run ollama:pull`. |
+| LLM: offline (Foundry) | Run `foundry model run <model-alias>` to start the REST server. |
+| Commands not recognized | Check the Command Log for the raw transcript. Try rephrasing using the examples above. |
