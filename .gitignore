@@ -6,6 +6,7 @@ dist/
 # Sherpa-ONNX WASM and model files (downloaded separately)
 public/sherpa-onnx/*.js
 public/sherpa-onnx/*.wasm
+public/sherpa-onnx/*.data
 public/models/*.onnx
 public/models/*.txt
 
