@@ -49,7 +49,7 @@ Recommended models (install with `ollama pull <model>`):
 | `qwen2.5:1.5b` | 1 GB | Fast, good JSON |
 | `gemma3:1b` | 815 MB | Lightweight |
 
-Set in `.env`:
+Set in `.env` (see .env.example):
 ```env
 VITE_LLM_PROVIDER=ollama
 VITE_OLLAMA_MODEL=phi4-mini

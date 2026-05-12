@@ -4,9 +4,10 @@ import SmartToyIcon from '@mui/icons-material/SmartToy';
 import { useImageStore } from '../store/imageStore';
 
 const LLM_PROVIDER = ((import.meta.env.VITE_LLM_PROVIDER as string | undefined) ?? 'ollama').toLowerCase();
-const LLM_MODEL = LLM_PROVIDER === 'foundry'
-  ? ((import.meta.env.VITE_FOUNDRY_MODEL as string | undefined) ?? 'unknown')
-  : ((import.meta.env.VITE_OLLAMA_MODEL as string | undefined) ?? 'unknown');
+const LLM_MODEL =
+  LLM_PROVIDER === 'foundry' ? ((import.meta.env.VITE_FOUNDRY_MODEL as string | undefined) ?? 'unknown') :
+  LLM_PROVIDER === 'claude'  ? ((import.meta.env.VITE_CLAUDE_MODEL  as string | undefined) ?? 'unknown') :
+                               ((import.meta.env.VITE_OLLAMA_MODEL  as string | undefined) ?? 'unknown');
 
 interface Props {
   children: React.ReactNode;

@@ -2,13 +2,15 @@ import type { VoiceCommand, ImageParamKey } from '../../types';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
-type LlmProvider = 'ollama' | 'foundry';
+type LlmProvider = 'ollama' | 'foundry' | 'claude';
 
-const PROVIDER     = ((import.meta.env.VITE_LLM_PROVIDER as string | undefined) ?? 'ollama') as LlmProvider;
-const OLLAMA_URL   = (import.meta.env.VITE_OLLAMA_URL   as string | undefined) ?? 'http://localhost:11434';
-const OLLAMA_MODEL = (import.meta.env.VITE_OLLAMA_MODEL as string | undefined) ?? 'phi4-mini';
-const FOUNDRY_URL  = (import.meta.env.VITE_FOUNDRY_URL  as string | undefined) ?? 'http://localhost:5764';
-const FOUNDRY_MODEL= (import.meta.env.VITE_FOUNDRY_MODEL as string | undefined) ?? 'phi-3.5-mini-instruct';
+const PROVIDER      = ((import.meta.env.VITE_LLM_PROVIDER  as string | undefined) ?? 'ollama') as LlmProvider;
+const OLLAMA_URL    = (import.meta.env.VITE_OLLAMA_URL    as string | undefined) ?? 'http://localhost:11434';
+const OLLAMA_MODEL  = (import.meta.env.VITE_OLLAMA_MODEL  as string | undefined) ?? 'phi4-mini';
+const FOUNDRY_URL   = (import.meta.env.VITE_FOUNDRY_URL   as string | undefined) ?? 'http://localhost:5764';
+const FOUNDRY_MODEL = (import.meta.env.VITE_FOUNDRY_MODEL as string | undefined) ?? 'phi-3.5-mini-instruct';
+const CLAUDE_URL    = (import.meta.env.VITE_CLAUDE_URL   as string | undefined) ?? 'http://localhost:8080';
+const CLAUDE_MODEL  = (import.meta.env.VITE_CLAUDE_MODEL  as string | undefined) ?? 'claude-haiku-4-5';
 
 // ─── Prompt ───────────────────────────────────────────────────────────────────
 
@@ -119,9 +121,9 @@ function parseCommandFallback(input: string): VoiceCommand | null {
  */
 export async function parseCommand(transcript: string): Promise<VoiceCommand | null> {
   try {
-    return PROVIDER === 'foundry'
-      ? await parseWithFoundry(transcript)
-      : await parseWithOllama(transcript);
+    if (PROVIDER === 'foundry') return await parseWithFoundry(transcript);
+    if (PROVIDER === 'claude')  return await parseWithClaude(transcript);
+    return await parseWithOllama(transcript);
   } catch {
     return parseCommandFallback(transcript);
   }
@@ -179,9 +181,9 @@ async function parseWithFoundry(transcript: string): Promise<VoiceCommand | null
 
 /** Returns true if the configured LLM provider is reachable and ready. */
 export async function checkLlmHealth(): Promise<boolean> {
-  return PROVIDER === 'foundry'
-    ? checkFoundryHealth()
-    : checkOllamaHealth();
+  if (PROVIDER === 'foundry') return checkFoundryHealth();
+  if (PROVIDER === 'claude')  return checkClaudeHealth();
+  return checkOllamaHealth();
 }
 
 async function checkOllamaHealth(): Promise<boolean> {
@@ -194,6 +196,45 @@ async function checkOllamaHealth(): Promise<boolean> {
     return data.models.some(
       (m) => m.name === OLLAMA_MODEL || m.name.startsWith(OLLAMA_MODEL.split(':')[0])
     );
+  } catch {
+    return false;
+  }
+}
+
+async function parseWithClaude(transcript: string): Promise<VoiceCommand | null> {
+  const response = await fetch(`${CLAUDE_URL}/v1/chat/completions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: CLAUDE_MODEL,
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: `Command: "${transcript}"\nJSON:` },
+      ],
+      temperature: 0.0,
+      max_tokens: 64,
+    }),
+    signal: AbortSignal.timeout(10_000),
+  });
+
+  if (!response.ok) throw new Error(`Claude HTTP ${response.status}`);
+
+  const data = (await response.json()) as { choices: { message: { content: string } }[] };
+  const raw = data.choices?.[0]?.message?.content ?? '';
+  const jsonText = extractJson(raw);
+  const parsed: unknown = JSON.parse(jsonText);
+  if (!isValidCommand(parsed)) throw new Error(`Unexpected JSON shape: ${jsonText}`);
+  return parsed;
+}
+
+async function checkClaudeHealth(): Promise<boolean> {
+  try {
+    const response = await fetch(`${CLAUDE_URL}/v1/models`, {
+      signal: AbortSignal.timeout(3_000),
+    });
+    if (!response.ok) return false;
+    const data = (await response.json()) as { data: { id: string }[] };
+    return data.data?.some((m) => m.id === CLAUDE_MODEL || m.id.startsWith(CLAUDE_MODEL)) ?? false;
   } catch {
     return false;
   }
